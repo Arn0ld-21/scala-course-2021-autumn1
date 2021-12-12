@@ -40,24 +40,76 @@ object Homework :
 
   object `Boolean Operators` :
 
-    def not(b: Boolean): Boolean = ??? // here is my greatest solution
-    def and(left: Boolean, right: Boolean): Boolean = ???
-    def or(left: Boolean, right: Boolean): Boolean = ???
+    def not(b: Boolean): Boolean =
+      if (b) false
+      else true
+
+    def and(left: Boolean, right: Boolean): Boolean =
+      if (!left) false
+      else if (!right) false
+      else true
+
+    def or(left: Boolean, right: Boolean): Boolean =
+      if (left) true
+      else if (right) true
+      else false
 
   end `Boolean Operators`
 
   object `Fermat Numbers` :
 
-    val multiplication: (BigInt, BigInt) => BigInt = ???
+    val multiplication: (BigInt, BigInt) => BigInt = (left, right) => {
+      @tailrec
+      def inner(left: BigInt, right: BigInt, ant: BigInt): BigInt = {
+        if (left == 0) ant
+        else inner(left - 1, right, ant + right)
+      }
 
-    val power: (BigInt, BigInt) => BigInt = ???
+      inner(left, right, 0)
+    }
 
-    val fermatNumber: Int => BigInt = ???
+    val power: (BigInt, BigInt) => BigInt = (left, right) => {
+      @tailrec
+      def inner(left: BigInt, right: BigInt, ant: BigInt): BigInt = {
+        if (right == 0) ant
+        else inner(left, right - 1, multiplication(ant, left))
+      }
+
+      inner(left, right, 1)
+    }
+
+    val fermatNumber: Int => BigInt =
+      i => power(2, power(2, i)) + 1
 
   end `Fermat Numbers`
 
   object `Look-and-say Sequence` :
-    val lookAndSaySequenceElement: Int => BigInt = ???
+    val lookAndSaySequenceElement: Int => BigInt = (n: Int) => {
+      if (n <= 0) BigInt(0)
+      var str = "1"
+
+      if (n > 1) str = "11"
+
+      var i = 3
+      while (i <= n) {
+        str += '$'
+        var tp = 1
+        var tmp = ""
+        val mas = str.toCharArray
+        for (j <- 1 until str.length) {
+          if (mas(j) != mas(j - 1)) {
+            tmp += tp + 0
+            tmp += mas(j - 1)
+            tp = 1
+          } else {
+            tp += 1
+          }
+        }
+        str = tmp
+        i += 1
+      }
+      BigInt(str)
+    }
 
   end `Look-and-say Sequence`
 
