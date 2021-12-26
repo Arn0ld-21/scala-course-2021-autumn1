@@ -1,6 +1,7 @@
 package karazin.scala.users.group.week1.homework
 
 import scala.annotation.tailrec
+
 /**
  * Preface
  * Implement all the things with ???.
@@ -36,9 +37,9 @@ import scala.annotation.tailrec
  * For more details @see https://en.wikipedia.org/wiki/Kolakoski_sequence
  */
 
-object Homework :
+object Homework:
 
-  object `Boolean Operators` :
+  object `Boolean Operators`:
 
     def not(b: Boolean): Boolean =
       if (b) false
@@ -56,7 +57,7 @@ object Homework :
 
   end `Boolean Operators`
 
-  object `Fermat Numbers` :
+  object `Fermat Numbers`:
 
     val multiplication: (BigInt, BigInt) => BigInt = (left, right) => {
       @tailrec
@@ -83,32 +84,45 @@ object Homework :
 
   end `Fermat Numbers`
 
-  object `Look-and-say Sequence` :
-    val lookAndSaySequenceElement: Int => BigInt = (n: Int) => {
-      if (n <= 0) BigInt(0)
-      var str = "1"
+  object `Look-and-say Sequence`:
+    val lookAndSaySequenceElement: Int => BigInt = n => {
 
-      if (n > 1) str = "11"
-
-      var i = 3
-      while (i <= n) {
-        str += '$'
-        var tp = 1
-        var tmp = ""
-        val mas = str.toCharArray
-        for (j <- 1 until str.length) {
-          if (mas(j) != mas(j - 1)) {
-            tmp += tp + 0
-            tmp += mas(j - 1)
-            tp = 1
-          } else {
-            tp += 1
-          }
+      @tailrec
+      def searchN(sp: List[Int], i: Int, result: String): BigInt = {
+        if i == sp.length
+        then BigInt(result)
+        else {
+          val amount = countI(sp, i, sp(i), 0)
+          val newI = i + amount
+          val newResult = result.concat(amount.toString()).concat(sp(i).toString)
+          searchN(sp, newI, newResult)
         }
-        str = tmp
-        i += 1
       }
-      BigInt(str)
+
+      @tailrec
+      def countI(sp: List[Int], i: Int, item: Int, amount: Int): Int = {
+        if i == sp.length || sp(i) != item
+        then amount
+        else
+          countI(sp, i + 1, item, amount + 1)
+      }
+
+      @tailrec
+      def searchNEl(n: Int, enumer: Int, result: BigInt): BigInt = {
+        if enumer == n
+        then result
+        else {
+          val num = result.toString().map(_.asDigit).toList
+          val newElement = searchN(num, 0, "")
+          searchNEl(n, enumer + 1, newElement)
+        }
+      }
+
+      if n < 0
+      then throw new IllegalArgumentException("Illegal argument with negative value: " + n)
+      else
+        searchNEl(n, 0, 1)
+
     }
 
   end `Look-and-say Sequence`
